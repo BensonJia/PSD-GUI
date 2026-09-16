@@ -1,0 +1,179 @@
+[[branches]]
+name = "Bus 2-Bus 7-i_8"
+status = 1
+to = 7
+from = 2
+type = "Transformer2W"
+available = true
+dynamic = false
+[[branches]]
+name = "Bus 4-Bus1-i_7"
+status = 1
+to = 1
+from = 4
+type = "Transformer2W"
+available = true
+dynamic = false
+[[branches]]
+name = "Bus 5-Bus 4-i_1"
+status = 1
+to = 4
+from = 5
+type = "Line"
+available = true
+dynamic = false
+[[branches]]
+name = "Bus 6-Bus 4-i_2"
+status = 1
+to = 4
+from = 6
+type = "Line"
+available = true
+dynamic = false
+[[branches]]
+name = "Bus 7-Bus 5-i_3"
+status = 1
+to = 5
+from = 7
+type = "Line"
+available = true
+dynamic = false
+[[branches]]
+name = "Bus 7-Bus 8-i_5"
+status = 1
+to = 8
+from = 7
+type = "Line"
+available = true
+dynamic = false
+[[branches]]
+name = "Bus 8-Bus 9-i_6"
+status = 1
+to = 9
+from = 8
+type = "Line"
+available = true
+dynamic = false
+[[branches]]
+name = "Bus 9-Bus 3-i_9"
+status = 1
+to = 3
+from = 9
+type = "Transformer2W"
+available = true
+dynamic = false
+[[branches]]
+name = "Bus 9-Bus 6-i_4"
+status = 1
+to = 6
+from = 9
+type = "Line"
+available = true
+dynamic = false
+
+[[buses]]
+name = "Bus1"
+number = 1
+bus_type = "REF"
+status = 1
+type = "ACBus"
+available = true
+[[buses]]
+name = "Bus 2"
+number = 2
+bus_type = "PV"
+status = 1
+type = "ACBus"
+available = true
+[[buses]]
+name = "Bus 3"
+number = 3
+bus_type = "PV"
+status = 1
+type = "ACBus"
+available = true
+[[buses]]
+name = "Bus 4"
+number = 4
+bus_type = "PQ"
+status = 1
+type = "ACBus"
+available = true
+[[buses]]
+name = "Bus 5"
+number = 5
+bus_type = "PQ"
+status = 1
+type = "ACBus"
+available = true
+[[buses]]
+name = "Bus 6"
+number = 6
+bus_type = "PQ"
+status = 1
+type = "ACBus"
+available = true
+[[buses]]
+name = "Bus 7"
+number = 7
+bus_type = "PQ"
+status = 1
+type = "ACBus"
+available = true
+[[buses]]
+name = "Bus 8"
+number = 8
+bus_type = "PQ"
+status = 1
+type = "ACBus"
+available = true
+[[buses]]
+name = "Bus 9"
+number = 9
+bus_type = "PQ"
+status = 1
+type = "ACBus"
+available = true
+
+[[injections]]
+name = "generator-1-1"
+status = 1
+dynamic_type = "DynamicGenerator{AndersonFouadMachine, SingleMass, AVRTypeII, TGTypeI, PSSFixed}"
+bus = 1
+type = "ThermalStandard"
+available = true
+[[injections]]
+name = "generator-2-1"
+status = 1
+dynamic_type = "DynamicInverter{AverageConverter, OuterControl{ActivePowerDroop, ReactivePowerDroop}, VoltageModeControl, FixedDCSource, FixedFrequency, LCLFilter, Nothing}"
+bus = 2
+type = "ThermalStandard"
+available = true
+[[injections]]
+name = "generator-3-1"
+status = 1
+dynamic_type = "DynamicGenerator{AndersonFouadMachine, SingleMass, AVRTypeII, TGTypeI, PSSFixed}"
+bus = 3
+type = "ThermalStandard"
+available = true
+[[injections]]
+name = "load51"
+status = 1
+dynamic_type = ""
+bus = 5
+type = "StandardLoad"
+available = true
+[[injections]]
+name = "load61"
+status = 1
+dynamic_type = ""
+bus = 6
+type = "StandardLoad"
+available = true
+[[injections]]
+name = "load81"
+status = 1
+dynamic_type = ""
+bus = 8
+type = "StandardLoad"
+available = true

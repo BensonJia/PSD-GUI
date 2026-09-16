@@ -1,0 +1,278 @@
+has_delays = false
+variable_count = 63
+branch_state_count = 0
+inner_variable_count = 43
+dae_vector = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true]
+ybus_colptr = [1, 3, 5, 7, 14, 20, 26, 33, 39, 46, 48, 50, 52, 59, 65, 71, 78, 84, 91]
+ybus_rowval = [10, 13, 11, 16, 12, 18, 4, 5, 6, 10, 13, 14, 15, 4, 5, 7, 13, 14, 16, 4, 6, 9, 13, 15, 18, 5, 7, 8, 11, 14, 16, 17, 7, 8, 9, 16, 17, 18, 6, 8, 9, 12, 15, 17, 18, 1, 4, 2, 7, 3, 9, 1, 4, 5, 6, 13, 14, 15, 4, 5, 7, 13, 14, 16, 4, 6, 9, 13, 15, 18, 2, 5, 7, 8, 14, 16, 17, 7, 8, 9, 16, 17, 18, 3, 6, 8, 9, 15, 17, 18]
+dynamic_branches = []
+ode_start = 19
+injection_state_count = 45
+
+[[injectors]]
+inner_variable_indices = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+dynamic_type = "DynamicGenerator{AndersonFouadMachine, SingleMass, AVRTypeII, TGTypeI, PSSFixed}"
+ode_indices = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+bus = 3
+states = ["ψq", "ψd", "eq_p", "ed_p", "eq_pp", "ed_pp", "δ", "ω", "Vf", "Vr1", "Vr2", "Vm", "x_g1", "x_g2", "x_g3"]
+state_indices = [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33]
+name = "generator-3-1"
+static_type = "ThermalStandard"
+
+    [[injectors.input_port_mapping]]
+    component_index = 1
+    indices = [8]
+    [[injectors.input_port_mapping]]
+    component_index = 2
+    indices = [8]
+    [[injectors.input_port_mapping]]
+    component_index = 3
+    indices = [7, 8, 9]
+    [[injectors.input_port_mapping]]
+    component_index = 4
+    indices = []
+    [[injectors.input_port_mapping]]
+    component_index = 5
+    indices = []
+
+    [[injectors.global_state_indices]]
+    index = 19
+    state = "ψq"
+    [[injectors.global_state_indices]]
+    index = 20
+    state = "ψd"
+    [[injectors.global_state_indices]]
+    index = 21
+    state = "eq_p"
+    [[injectors.global_state_indices]]
+    index = 22
+    state = "ed_p"
+    [[injectors.global_state_indices]]
+    index = 23
+    state = "eq_pp"
+    [[injectors.global_state_indices]]
+    index = 24
+    state = "ed_pp"
+    [[injectors.global_state_indices]]
+    index = 25
+    state = "δ"
+    [[injectors.global_state_indices]]
+    index = 26
+    state = "ω"
+    [[injectors.global_state_indices]]
+    index = 27
+    state = "Vf"
+    [[injectors.global_state_indices]]
+    index = 28
+    state = "Vr1"
+    [[injectors.global_state_indices]]
+    index = 29
+    state = "Vr2"
+    [[injectors.global_state_indices]]
+    index = 30
+    state = "Vm"
+    [[injectors.global_state_indices]]
+    index = 31
+    state = "x_g1"
+    [[injectors.global_state_indices]]
+    index = 32
+    state = "x_g2"
+    [[injectors.global_state_indices]]
+    index = 33
+    state = "x_g3"
+
+    [[injectors.component_state_mapping]]
+    component_index = 1
+    indices = [13, 14, 15]
+    [[injectors.component_state_mapping]]
+    component_index = 2
+    indices = []
+    [[injectors.component_state_mapping]]
+    component_index = 3
+    indices = [1, 2, 3, 4, 5, 6]
+    [[injectors.component_state_mapping]]
+    component_index = 4
+    indices = [7, 8]
+    [[injectors.component_state_mapping]]
+    component_index = 5
+    indices = [9, 10, 11, 12]
+[[injectors]]
+inner_variable_indices = [10, 11, 12, 13, 14, 15, 16, 17, 18]
+dynamic_type = "DynamicGenerator{AndersonFouadMachine, SingleMass, AVRTypeII, TGTypeI, PSSFixed}"
+ode_indices = [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+bus = 1
+states = ["ψq", "ψd", "eq_p", "ed_p", "eq_pp", "ed_pp", "δ", "ω", "Vf", "Vr1", "Vr2", "Vm", "x_g1", "x_g2", "x_g3"]
+state_indices = [34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48]
+name = "generator-1-1"
+static_type = "ThermalStandard"
+
+    [[injectors.input_port_mapping]]
+    component_index = 1
+    indices = [8]
+    [[injectors.input_port_mapping]]
+    component_index = 2
+    indices = [8]
+    [[injectors.input_port_mapping]]
+    component_index = 3
+    indices = [7, 8, 9]
+    [[injectors.input_port_mapping]]
+    component_index = 4
+    indices = []
+    [[injectors.input_port_mapping]]
+    component_index = 5
+    indices = []
+
+    [[injectors.global_state_indices]]
+    index = 34
+    state = "ψq"
+    [[injectors.global_state_indices]]
+    index = 35
+    state = "ψd"
+    [[injectors.global_state_indices]]
+    index = 36
+    state = "eq_p"
+    [[injectors.global_state_indices]]
+    index = 37
+    state = "ed_p"
+    [[injectors.global_state_indices]]
+    index = 38
+    state = "eq_pp"
+    [[injectors.global_state_indices]]
+    index = 39
+    state = "ed_pp"
+    [[injectors.global_state_indices]]
+    index = 40
+    state = "δ"
+    [[injectors.global_state_indices]]
+    index = 41
+    state = "ω"
+    [[injectors.global_state_indices]]
+    index = 42
+    state = "Vf"
+    [[injectors.global_state_indices]]
+    index = 43
+    state = "Vr1"
+    [[injectors.global_state_indices]]
+    index = 44
+    state = "Vr2"
+    [[injectors.global_state_indices]]
+    index = 45
+    state = "Vm"
+    [[injectors.global_state_indices]]
+    index = 46
+    state = "x_g1"
+    [[injectors.global_state_indices]]
+    index = 47
+    state = "x_g2"
+    [[injectors.global_state_indices]]
+    index = 48
+    state = "x_g3"
+
+    [[injectors.component_state_mapping]]
+    component_index = 1
+    indices = [13, 14, 15]
+    [[injectors.component_state_mapping]]
+    component_index = 2
+    indices = []
+    [[injectors.component_state_mapping]]
+    component_index = 3
+    indices = [1, 2, 3, 4, 5, 6]
+    [[injectors.component_state_mapping]]
+    component_index = 4
+    indices = [7, 8]
+    [[injectors.component_state_mapping]]
+    component_index = 5
+    indices = [9, 10, 11, 12]
+[[injectors]]
+inner_variable_indices = [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43]
+dynamic_type = "DynamicInverter{AverageConverter, OuterControl{ActivePowerDroop, ReactivePowerDroop}, VoltageModeControl, FixedDCSource, FixedFrequency, LCLFilter, Nothing}"
+ode_indices = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45]
+bus = 2
+states = ["θ_oc", "p_oc", "q_oc", "ξd_ic", "ξq_ic", "γd_ic", "γq_ic", "ϕd_ic", "ϕq_ic", "ir_cnv", "ii_cnv", "vr_filter", "vi_filter", "ir_filter", "ii_filter"]
+state_indices = [49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63]
+name = "generator-2-1"
+static_type = "ThermalStandard"
+
+    [[injectors.input_port_mapping]]
+    component_index = 1
+    indices = []
+    [[injectors.input_port_mapping]]
+    component_index = 2
+    indices = [12, 13, 1]
+    [[injectors.input_port_mapping]]
+    component_index = 3
+    indices = [12, 13, 14, 15, 10, 11]
+    [[injectors.input_port_mapping]]
+    component_index = 4
+    indices = [14, 15, 10, 11, 12, 13]
+    [[injectors.input_port_mapping]]
+    component_index = 5
+    indices = []
+    [[injectors.input_port_mapping]]
+    component_index = 6
+    indices = [1]
+
+    [[injectors.global_state_indices]]
+    index = 49
+    state = "θ_oc"
+    [[injectors.global_state_indices]]
+    index = 50
+    state = "p_oc"
+    [[injectors.global_state_indices]]
+    index = 51
+    state = "q_oc"
+    [[injectors.global_state_indices]]
+    index = 52
+    state = "ξd_ic"
+    [[injectors.global_state_indices]]
+    index = 53
+    state = "ξq_ic"
+    [[injectors.global_state_indices]]
+    index = 54
+    state = "γd_ic"
+    [[injectors.global_state_indices]]
+    index = 55
+    state = "γq_ic"
+    [[injectors.global_state_indices]]
+    index = 56
+    state = "ϕd_ic"
+    [[injectors.global_state_indices]]
+    index = 57
+    state = "ϕq_ic"
+    [[injectors.global_state_indices]]
+    index = 58
+    state = "ir_cnv"
+    [[injectors.global_state_indices]]
+    index = 59
+    state = "ii_cnv"
+    [[injectors.global_state_indices]]
+    index = 60
+    state = "vr_filter"
+    [[injectors.global_state_indices]]
+    index = 61
+    state = "vi_filter"
+    [[injectors.global_state_indices]]
+    index = 62
+    state = "ir_filter"
+    [[injectors.global_state_indices]]
+    index = 63
+    state = "ii_filter"
+
+    [[injectors.component_state_mapping]]
+    component_index = 1
+    indices = []
+    [[injectors.component_state_mapping]]
+    component_index = 2
+    indices = []
+    [[injectors.component_state_mapping]]
+    component_index = 3
+    indices = [1, 2, 3]
+    [[injectors.component_state_mapping]]
+    component_index = 4
+    indices = [4, 5, 6, 7, 8, 9]
+    [[injectors.component_state_mapping]]
+    component_index = 5
+    indices = []
+    [[injectors.component_state_mapping]]
+    component_index = 6
+    indices = [10, 11, 12, 13, 14, 15]

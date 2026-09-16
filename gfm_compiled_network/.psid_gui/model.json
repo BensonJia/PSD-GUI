@@ -1,0 +1,318 @@
+{
+  "schema_version": 1,
+  "instances": [
+    {
+      "id": "d7b9d67e-6433-4055-91b1-95db7048e7bc",
+      "name": "StandardLoad",
+      "kind": "load",
+      "model_ref": "StandardLoad",
+      "ports": [
+        {
+          "name": "电气端口",
+          "domain": "AC_BUS",
+          "role": "sink",
+          "required": true,
+          "side": "auto",
+          "id": "terminal"
+        }
+      ],
+      "position": [
+        1140.0,
+        -60.0
+      ],
+      "parameters": {
+        "base_power": 100.0,
+        "constant_active_power": 0.0,
+        "constant_reactive_power": 0.0,
+        "impedance_active_power": 0.0,
+        "impedance_reactive_power": 0.0,
+        "current_active_power": 0.0,
+        "current_reactive_power": 0.0,
+        "max_constant_active_power": 0.0,
+        "max_constant_reactive_power": 0.0,
+        "max_impedance_active_power": 0.0,
+        "max_impedance_reactive_power": 0.0,
+        "max_current_active_power": 0.0,
+        "max_current_reactive_power": 0.0,
+        "available": true
+      },
+      "bus_number": null,
+      "backend_supported": true
+    }
+  ],
+  "connections": [
+    {
+      "id": "e8633c17-e473-4c0d-99b8-cc942c805177",
+      "first_key": "bus:5",
+      "first_port": "__edit_out",
+      "second_key": "editor:d7b9d67e-6433-4055-91b1-95db7048e7bc",
+      "second_port": "terminal"
+    }
+  ],
+  "deleted_keys": [],
+  "slot_overrides": [],
+  "geometry": {
+    "branch:Bus 4-Bus1-i_7": [
+      124.4423607042242,
+      299.45173753521533,
+      232.515625,
+      84.0,
+      0,
+      false,
+      false
+    ],
+    "bus:1": [
+      0.0,
+      0.0,
+      160.0,
+      74.2,
+      0,
+      false,
+      true
+    ],
+    "bus:5": [
+      809.0991529041561,
+      -401.7110122459727,
+      160.0,
+      97.3,
+      0,
+      false,
+      false
+    ],
+    "branch:Bus 2-Bus 7-i_8": [
+      1624.3811590280234,
+      -351.6559192359561,
+      237.765625,
+      84.0,
+      0,
+      true,
+      false
+    ],
+    "bus:7": [
+      1259.9999999999998,
+      61.53534628115206,
+      160.0,
+      97.3,
+      0,
+      false,
+      false
+    ],
+    "bus:9": [
+      983.0909417348159,
+      124.44327678612495,
+      160.0,
+      97.3,
+      0,
+      false,
+      false
+    ],
+    "bus:2": [
+      2214.095001114402,
+      -202.13441580637362,
+      160.0,
+      84.0,
+      270,
+      false,
+      false
+    ],
+    "bus:3": [
+      1680.0,
+      300.0,
+      160.0,
+      97.3,
+      0,
+      false,
+      false
+    ],
+    "bus:4": [
+      420.0,
+      0.0,
+      160.0,
+      97.3,
+      0,
+      false,
+      false
+    ],
+    "bus:6": [
+      840.0,
+      300.0,
+      160.0,
+      97.3,
+      0,
+      false,
+      false
+    ],
+    "bus:8": [
+      1680.0,
+      600.0,
+      160.0,
+      97.3,
+      0,
+      false,
+      false
+    ],
+    "branch:Bus 5-Bus 4-i_1": [
+      630.0,
+      0.0,
+      169.6875,
+      84.0,
+      0,
+      false,
+      false
+    ],
+    "branch:Bus 6-Bus 4-i_2": [
+      630.0,
+      150.0,
+      171.734375,
+      84.0,
+      0,
+      false,
+      false
+    ],
+    "branch:Bus 7-Bus 5-i_3": [
+      1253.632201795756,
+      -234.9602328412569,
+      170.828125,
+      84.0,
+      0,
+      false,
+      false
+    ],
+    "branch:Bus 7-Bus 8-i_5": [
+      1470.0,
+      300.0,
+      170.984375,
+      84.0,
+      0,
+      false,
+      false
+    ],
+    "branch:Bus 8-Bus 9-i_6": [
+      1470.0,
+      450.0,
+      172.09375,
+      84.0,
+      0,
+      false,
+      false
+    ],
+    "branch:Bus 9-Bus 3-i_9": [
+      1470.0,
+      300.0,
+      238.90625,
+      84.0,
+      0,
+      false,
+      false
+    ],
+    "branch:Bus 9-Bus 6-i_4": [
+      1050.0,
+      300.0,
+      172.15625,
+      84.0,
+      0,
+      false,
+      false
+    ],
+    "injection:generator-1-1": [
+      -19.75838168230848,
+      -250.0,
+      262.140625,
+      84.0,
+      0,
+      false,
+      false
+    ],
+    "injection:generator-2-1": [
+      2079.338723910153,
+      -8.424722572870522,
+      264.328125,
+      84.0,
+      270,
+      false,
+      false
+    ],
+    "injection:generator-3-1": [
+      1680.0,
+      50.0,
+      264.625,
+      84.0,
+      0,
+      false,
+      false
+    ],
+    "injection:load51": [
+      1401.1380397775615,
+      -769.5324948071183,
+      201.0625,
+      84.0,
+      0,
+      false,
+      false
+    ],
+    "injection:load61": [
+      840.0,
+      550.0,
+      201.296875,
+      84.0,
+      0,
+      false,
+      false
+    ],
+    "injection:load81": [
+      1680.0,
+      850.0,
+      201.328125,
+      84.0,
+      0,
+      false,
+      false
+    ],
+    "injections/generator-1-1/avr": [
+      430.0,
+      0.0,
+      160.0,
+      74.2,
+      0,
+      false,
+      false
+    ],
+    "injections/generator-1-1/machine": [
+      430.0,
+      220.0,
+      210.703125,
+      97.3,
+      0,
+      false,
+      false
+    ],
+    "injections/generator-1-1/prime_mover": [
+      430.0,
+      440.0,
+      241.375,
+      74.2,
+      0,
+      false,
+      false
+    ],
+    "injections/generator-1-1/pss": [
+      430.0,
+      660.0,
+      160.0,
+      97.3,
+      0,
+      false,
+      false
+    ],
+    "injections/generator-1-1/shaft": [
+      430.0,
+      880.0,
+      169.78125,
+      97.3,
+      0,
+      false,
+      false
+    ]
+  },
+  "port_positions": {}
+}

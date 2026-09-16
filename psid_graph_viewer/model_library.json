@@ -1,0 +1,1685 @@
+{
+  "schema_version": 1,
+  "source": "PowerSimulationsDynamics.jl/src/models",
+  "description": "由当前 PowerSimulationsDynamics.jl 源码中的 mdl_* 实现生成。",
+  "models": {
+    "AVRFixed": [
+      {
+        "category": "励磁系统",
+        "entrypoint": "mdl_avr_ode!",
+        "source": "src/models/generator_models/avr_models.jl",
+        "derivatives": [],
+        "algebraic": [
+          "inner_vars[Vf_var] = get_V_ref(dynamic_device)"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "AVRSimple": [
+      {
+        "category": "励磁系统",
+        "entrypoint": "mdl_avr_ode!",
+        "source": "src/models/generator_models/avr_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = Kv * (V_ref - V_th)"
+        ],
+        "algebraic": [
+          "inner_vars[Vf_var] = Vf"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "AVRTypeI": [
+      {
+        "category": "励磁系统",
+        "entrypoint": "mdl_avr_ode!",
+        "source": "src/models/generator_models/avr_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dVf_dt",
+          "output_ode[local_ix[2]] = dVr1_dt",
+          "output_ode[local_ix[3]] = dVr2_dt",
+          "output_ode[local_ix[4]] = dVm_dt"
+        ],
+        "algebraic": [
+          "inner_vars[Vf_var] = Vf"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "AVRTypeII": [
+      {
+        "category": "励磁系统",
+        "entrypoint": "mdl_avr_ode!",
+        "source": "src/models/generator_models/avr_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dVf_dt",
+          "output_ode[local_ix[2]] = dVr1_dt",
+          "output_ode[local_ix[3]] = dVr2_dt",
+          "output_ode[local_ix[4]] = dVm_dt"
+        ],
+        "algebraic": [
+          "inner_vars[Vf_var] = Vf"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "ActiveConstantPowerLoad": [
+      {
+        "category": "聚合动态设备",
+        "entrypoint": "device!",
+        "source": "src/models/device.jl",
+        "derivatives": [
+          "output_ode[1] = 2 * pi * f0 * Δω_pi",
+          "output_ode[2] = dϵ_dt",
+          "output_ode[3] = dη_dt",
+          "output_ode[4] = (2 * pi * f0 / c_dc) * (P_cnv / v_dc - v_dc / r_load)",
+          "output_ode[5] = dγd_dt",
+          "output_ode[6] = dγq_dt",
+          "output_ode[7] = (Vr_filter - Vr_cnv - rf * Ir_cnv + lf * sys_ω * Ii_cnv)",
+          "output_ode[8] = (Vi_filter - Vi_cnv - rf * Ii_cnv - lf * sys_ω * Ir_cnv)",
+          "output_ode[9] = (Ir_filter - Ir_cnv + cf * sys_ω * Vi_filter)",
+          "output_ode[10] = (Ii_filter - Ii_cnv - cf * sys_ω * Vr_filter)",
+          "output_ode[11] = (V_tR - Vr_filter - rg * Ir_filter + lg * sys_ω * Ii_filter)",
+          "output_ode[12] = (V_tI - Vi_filter - rg * Ii_filter - lg * sys_ω * Ir_filter)"
+        ],
+        "algebraic": [
+          "current_r[1] -= Ir_filter * base_power / Sbase",
+          "current_i[1] -= Ii_filter * base_power / Sbase"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:ir_cnv], global_index[:ir_cnv]] = bool_mm_value * PSY.get_lf(device) / ωb",
+          "mass_matrix[global_index[:ii_cnv], global_index[:ii_cnv]] = bool_mm_value * PSY.get_lf(device) / ωb",
+          "mass_matrix[global_index[:vr_filter], global_index[:vr_filter]] = bool_mm_value * PSY.get_cf(device) / ωb",
+          "mass_matrix[global_index[:vi_filter], global_index[:vi_filter]] = bool_mm_value * PSY.get_cf(device) / ωb",
+          "mass_matrix[global_index[:ir_filter], global_index[:ir_filter]] = bool_mm_value * PSY.get_lg(device) / ωb",
+          "mass_matrix[global_index[:ii_filter], global_index[:ii_filter]] = bool_mm_value * PSY.get_lg(device) / ωb"
+        ]
+      }
+    ],
+    "ActivePowerDroop": [
+      {
+        "category": "外环控制器",
+        "entrypoint": "mdl_outer_ode!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = bool_val * ωb * (ω_oc - ω_sys)",
+          "output_ode[local_ix[2]] = dpm_dt",
+          "output_ode[local_ix[3]] = dqm_dt"
+        ],
+        "algebraic": [
+          "inner_vars[θ_oc_var] = θ_oc",
+          "inner_vars[ω_oc_var] = ω_oc",
+          "inner_vars[V_oc_var] = V_ref + kq * (q_ref - qm)"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "ActivePowerPI": [
+      {
+        "category": "外环控制器",
+        "entrypoint": "mdl_outer_ode!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dσpoc_dt",
+          "output_ode[local_ix[2]] = dpoc_dt",
+          "output_ode[local_ix[3]] = dσqoc_dt",
+          "output_ode[local_ix[4]] = dqoc_dt"
+        ],
+        "algebraic": [
+          "inner_vars[θ_oc_var] = θ_pll",
+          "inner_vars[ω_oc_var] = ω_pll",
+          "inner_vars[Id_oc_var] = Id_pi",
+          "inner_vars[Iq_oc_var] = -Iq_pi"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "ActiveRenewableControllerAB": [
+      {
+        "category": "外环控制器",
+        "entrypoint": "_mdl_ode_RE_active_controller_AB!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "active_controller_ode[1] = dpflt_dt",
+          "active_controller_ode[2] = dξP_dt",
+          "active_controller_ode[3] = dpext_dt",
+          "active_controller_ode[4] = dpord_dt"
+        ],
+        "algebraic": [
+          "inner_vars[Id_oc_var] = p_ord_sat / max(Vt_filt, VOLTAGE_DIVISION_LOWER_BOUND)"
+        ],
+        "mass_matrix": []
+      },
+      {
+        "category": "外环控制器",
+        "entrypoint": "_mdl_ode_RE_active_controller_AB!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "active_controller_ode[1] = dpord_dt"
+        ],
+        "algebraic": [
+          "inner_vars[Id_oc_var] = p_ord / max(Vt_filt, VOLTAGE_DIVISION_LOWER_BOUND)"
+        ],
+        "mass_matrix": []
+      },
+      {
+        "category": "外环控制器",
+        "entrypoint": "_mdl_ode_RE_reactive_controller_AB!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "reactive_controller_ode[1] = dqflt_dt",
+          "reactive_controller_ode[2] = dξqoc_dt",
+          "reactive_controller_ode[3] = dqLL_dt",
+          "reactive_controller_ode[4] = dξQ_dt"
+        ],
+        "algebraic": [
+          "inner_vars[V_oc_var] = V_pi_sat - Vt_filt",
+          "inner_vars[Iq_oc_var] = Q_ext / max(Vt_filt, VOLTAGE_DIVISION_LOWER_BOUND)"
+        ],
+        "mass_matrix": []
+      },
+      {
+        "category": "外环控制器",
+        "entrypoint": "_mdl_ode_RE_reactive_controller_AB!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "reactive_controller_ode[1] = dqflt_dt",
+          "reactive_controller_ode[2] = dξqoc_dt",
+          "reactive_controller_ode[3] = dqLL_dt"
+        ],
+        "algebraic": [
+          "inner_vars[V_oc_var] = Q_ext - Vt_filt",
+          "inner_vars[Iq_oc_var] = Q_ext / max(Vt_filt, VOLTAGE_DIVISION_LOWER_BOUND)"
+        ],
+        "mass_matrix": []
+      },
+      {
+        "category": "外环控制器",
+        "entrypoint": "_mdl_ode_RE_reactive_controller_AB!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "reactive_controller_ode[1] = dVcflt_dt",
+          "reactive_controller_ode[2] = dξqoc_dt",
+          "reactive_controller_ode[3] = dqLL_dt",
+          "reactive_controller_ode[4] = dξQ_dt"
+        ],
+        "algebraic": [
+          "inner_vars[V_oc_var] = V_pi_sat - Vt_filt",
+          "inner_vars[Iq_oc_var] = Q_ext / max(Vt_filt, VOLTAGE_DIVISION_LOWER_BOUND)"
+        ],
+        "mass_matrix": []
+      },
+      {
+        "category": "外环控制器",
+        "entrypoint": "_mdl_ode_RE_reactive_controller_AB!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "reactive_controller_ode[1] = dVcflt_dt",
+          "reactive_controller_ode[2] = dξqoc_dt",
+          "reactive_controller_ode[3] = dqLL_dt"
+        ],
+        "algebraic": [
+          "inner_vars[V_oc_var] = V_pi_sat - Vt_filt",
+          "inner_vars[Iq_oc_var] = Q_ext / max(Vt_filt, VOLTAGE_DIVISION_LOWER_BOUND)"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "ActiveVirtualOscillator": [
+      {
+        "category": "外环控制器",
+        "entrypoint": "mdl_outer_ode!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = bool_val * ωb * (ω_oc - ω_sys)",
+          "output_ode[local_ix[2]] = dEoc_dt"
+        ],
+        "algebraic": [
+          "inner_vars[θ_oc_var] = θ_oc",
+          "inner_vars[ω_oc_var] = ω_oc",
+          "inner_vars[V_oc_var] = E_oc"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "AggregateDistributedGenerationA": [
+      {
+        "category": "聚合动态设备",
+        "entrypoint": "_mdl_ode_AggregateDistributedGenerationA!",
+        "source": "src/models/device.jl",
+        "derivatives": [
+          "output_ode[1] = dVmeas_dt",
+          "output_ode[2] = dPmeas_dt",
+          "output_ode[3] = dQ_V_dt",
+          "output_ode[4] = dIq_dt",
+          "output_ode[5] = dMult_dt",
+          "output_ode[6] = dFmeas_dt",
+          "output_ode[7] = dIp_dt"
+        ],
+        "algebraic": [
+          "current_r[1] = I_r * base_power_ratio",
+          "current_i[1] = I_i * base_power_ratio"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:Vmeas], global_index[:Vmeas]] = PSY.get_T_rv(ddera)",
+          "mass_matrix[global_index[:Pmeas], global_index[:Pmeas]] = PSY.get_Tp(ddera)",
+          "mass_matrix[global_index[:Q_V], global_index[:Q_V]] = PSY.get_T_iq(ddera)",
+          "mass_matrix[global_index[:Mult], global_index[:Mult]] = PSY.get_Tv(ddera)",
+          "mass_matrix[global_index[:Fmeas], global_index[:Fmeas]] = PSY.get_Trf(ddera)",
+          "mass_matrix[global_index[:Pord], global_index[:Pord]] = PSY.get_Tpord(ddera)"
+        ]
+      },
+      {
+        "category": "聚合动态设备",
+        "entrypoint": "_mdl_ode_AggregateDistributedGenerationA!",
+        "source": "src/models/device.jl",
+        "derivatives": [
+          "output_ode[1] = dVmeas_dt",
+          "output_ode[2] = dPmeas_dt",
+          "output_ode[3] = dQ_V_dt",
+          "output_ode[4] = dIq_dt",
+          "output_ode[5] = dMult_dt",
+          "output_ode[6] = dFmeas_dt",
+          "output_ode[7] = dPowerPI_dt",
+          "output_ode[8] = ddPord_dt",
+          "output_ode[9] = dPord_dt",
+          "output_ode[10] = dIp_dt"
+        ],
+        "algebraic": [
+          "current_r[1] = I_r * base_power_ratio",
+          "current_i[1] = I_i * base_power_ratio"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:Vmeas], global_index[:Vmeas]] = PSY.get_T_rv(ddera)",
+          "mass_matrix[global_index[:Pmeas], global_index[:Pmeas]] = PSY.get_Tp(ddera)",
+          "mass_matrix[global_index[:Q_V], global_index[:Q_V]] = PSY.get_T_iq(ddera)",
+          "mass_matrix[global_index[:Mult], global_index[:Mult]] = PSY.get_Tv(ddera)",
+          "mass_matrix[global_index[:Fmeas], global_index[:Fmeas]] = PSY.get_Trf(ddera)",
+          "mass_matrix[global_index[:Pord], global_index[:Pord]] = PSY.get_Tpord(ddera)"
+        ]
+      }
+    ],
+    "AndersonFouadMachine": [
+      {
+        "category": "同步机",
+        "entrypoint": "mdl_machine_ode!",
+        "source": "src/models/generator_models/machine_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = 2 * π * f0 * (R * i_q - ω * ψd + V_dq[2])",
+          "output_ode[local_ix[2]] = 2 * π * f0 * (R * i_d + ω * ψq + V_dq[1])",
+          "output_ode[local_ix[3]] = (1.0 / Td0_p) * (-eq_p + (Xd - Xd_p) * i_d + Vf)",
+          "output_ode[local_ix[4]] = (1.0 / Tq0_p) * (-ed_p + (Xq - Xq_p) * i_q)",
+          "output_ode[local_ix[5]] = (1.0 / Td0_pp) * (-eq_pp + eq_p - (Xd_p - Xd_pp) * i_d)",
+          "output_ode[local_ix[6]] = (1.0 / Tq0_pp) * (-ed_pp + ed_p + (Xq_p - Xq_pp) * i_q)"
+        ],
+        "algebraic": [
+          "inner_vars[τe_var] = τ_e",
+          "current_r[1] += I_RI[1]",
+          "current_i[1] += I_RI[2]"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "AverageConverter": [
+      {
+        "category": "变流器",
+        "entrypoint": "mdl_converter_ode!",
+        "source": "src/models/inverter_models/converter_models.jl",
+        "derivatives": [],
+        "algebraic": [
+          "inner_vars[Vr_cnv_var] = m_ri[R] * Vdc",
+          "inner_vars[Vi_cnv_var] = m_ri[I] * Vdc"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "BaseMachine": [
+      {
+        "category": "同步机",
+        "entrypoint": "mdl_machine_ode!",
+        "source": "src/models/generator_models/machine_models.jl",
+        "derivatives": [],
+        "algebraic": [
+          "inner_vars[τe_var] = Pe",
+          "current_r[1] += I_RI[1]",
+          "current_i[1] += I_RI[2]"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "CSVGN1": [
+      {
+        "category": "聚合动态设备",
+        "entrypoint": "device!",
+        "source": "src/models/device.jl",
+        "derivatives": [
+          "output_ode[1] = dthy_dt",
+          "output_ode[2] = dvr1_dt",
+          "output_ode[3] = dvr2_dt"
+        ],
+        "algebraic": [
+          "current_r[1] = Y * voltage_i",
+          "current_i[1] = -Y * voltage_r"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "CurrentModeControl": [
+      {
+        "category": "内环控制器",
+        "entrypoint": "mdl_inner_ode!",
+        "source": "src/models/inverter_models/inner_control_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dγd_dt",
+          "output_ode[local_ix[2]] = dγq_dt"
+        ],
+        "algebraic": [
+          "inner_vars[md_var] = Vd_cnv_ref / Vdc",
+          "inner_vars[mq_var] = Vq_cnv_ref / Vdc"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "DEGOV": [
+      {
+        "category": "调速器",
+        "entrypoint": "mdl_tg_ode!",
+        "source": "src/models/generator_models/tg_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dx_ecb1",
+          "output_ode[local_ix[2]] = dx_ecb2",
+          "output_ode[local_ix[3]] = dx_a1",
+          "output_ode[local_ix[4]] = dx_a2",
+          "output_ode[local_ix[5]] = dx_a3"
+        ],
+        "algebraic": [
+          "inner_vars[τm_var] = P_m / ω[1]"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:x_ecb1], global_index[:x_ecb1]] = PSY.get_T1(tg) * PSY.get_T2(tg)",
+          "mass_matrix[global_index[:x_a1], global_index[:x_a1]] = PSY.get_T5(tg) * PSY.get_T6(tg)"
+        ]
+      }
+    ],
+    "DEGOV1": [
+      {
+        "category": "调速器",
+        "entrypoint": "mdl_tg_ode!",
+        "source": "src/models/generator_models/tg_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dx_g1",
+          "output_ode[local_ix[2]] = dx_g2",
+          "output_ode[local_ix[3]] = dx_g3",
+          "output_ode[local_ix[4]] = dx_g4",
+          "output_ode[local_ix[5]] = dx_g5",
+          "output_ode[local_ix[6]] = dx_g6"
+        ],
+        "algebraic": [
+          "inner_vars[τm_var] = P_m / ω[1]"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:x_g1], global_index[:x_g1]] = PSY.get_T1(tg) * PSY.get_T2(tg)",
+          "mass_matrix[global_index[:x_g3], global_index[:x_g3]] = PSY.get_T5(tg) * PSY.get_T6(tg)",
+          "mass_matrix[global_index[:x_g6], global_index[:x_g6]] = PSY.get_Te(tg)"
+        ]
+      }
+    ],
+    "DynamicBranch": [
+      {
+        "category": "动态支路",
+        "entrypoint": "mdl_branch_ode!",
+        "source": "src/models/dynline_model.jl",
+        "derivatives": [
+          "output_ode[1] = (ω_b / L) * ((voltage_r_from - voltage_r_to) - (R * Il_r - L * Il_i))",
+          "output_ode[2] = (ω_b / L) * ((voltage_i_from - voltage_i_to) - (R * Il_i + L * Il_r))"
+        ],
+        "algebraic": [
+          "current_r_from[1] -= Il_r",
+          "current_i_from[1] -= Il_i",
+          "current_r_to[1] += Il_r",
+          "current_i_to[1] += Il_i"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "DynamicTransformer": [
+      {
+        "category": "动态支路",
+        "entrypoint": "mdl_transformer_Lshape_ode!",
+        "source": "src/models/dynline_model.jl",
+        "derivatives": [
+          "output_ode[1] = (ω_b / L) * ((voltage_r_from - voltage_r_to) - (R * Il_r - L * Il_i))",
+          "output_ode[2] = (ω_b / L) * ((voltage_i_from - voltage_i_to) - (R * Il_i + L * Il_r))",
+          "output_ode[3] = (ω_b / shunt) * voltage_r_from + L * Ishunt_i",
+          "output_ode[4] = (ω_b / shunt) * voltage_i_from - L * Ishunt_r"
+        ],
+        "algebraic": [
+          "current_r_from[1] -= (Il_r + Ishunt_r)",
+          "current_i_from[1] -= (Il_r + Ishunt_i)",
+          "current_r_to[1] += Il_r",
+          "current_i_to[1] += Il_i"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "ESAC1A": [
+      {
+        "category": "励磁系统",
+        "entrypoint": "mdl_avr_ode!",
+        "source": "src/models/generator_models/avr_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dVm_dt",
+          "output_ode[local_ix[2]] = dVr1_dt",
+          "output_ode[local_ix[3]] = dVr2_dt",
+          "output_ode[local_ix[4]] = (1.0 / Te) * (V_R - V_FE)",
+          "output_ode[local_ix[5]] = dVr3_dt"
+        ],
+        "algebraic": [
+          "inner_vars[Vf_var] = Vf"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "ESST1A": [
+      {
+        "category": "励磁系统",
+        "entrypoint": "mdl_avr_ode!",
+        "source": "src/models/generator_models/avr_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dVm_dt",
+          "output_ode[local_ix[2]] = dVr1_dt",
+          "output_ode[local_ix[3]] = dVr2_dt",
+          "output_ode[local_ix[4]] = dVa_dt",
+          "output_ode[local_ix[5]] = dVr3_dt"
+        ],
+        "algebraic": [
+          "inner_vars[Vf_var] = Vf"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:Vm], global_index[:Vm]] = PSY.get_Tr(avr)",
+          "mass_matrix[global_index[:Vr1], global_index[:Vr1]] = PSY.get_Tb(avr)",
+          "mass_matrix[global_index[:Vr2], global_index[:Vr2]] = PSY.get_Tb1(avr)",
+          "mass_matrix[global_index[:Va], global_index[:Va]] = PSY.get_Ta(avr)"
+        ]
+      }
+    ],
+    "EXAC1": [
+      {
+        "category": "励磁系统",
+        "entrypoint": "mdl_avr_ode!",
+        "source": "src/models/generator_models/avr_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dVm_dt",
+          "output_ode[local_ix[2]] = dVr1_dt",
+          "output_ode[local_ix[3]] = dVr2_dt",
+          "output_ode[local_ix[4]] = dVe_dt",
+          "output_ode[local_ix[5]] = dVr3_dt"
+        ],
+        "algebraic": [
+          "inner_vars[Vf_var] = Vf"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:Vm], global_index[:Vm]] = PSY.get_Tr(avr)",
+          "mass_matrix[global_index[:Vr1], global_index[:Vr1]] = PSY.get_Tb(avr)",
+          "mass_matrix[global_index[:Vr2], global_index[:Vr2]] = PSY.get_Ta(avr)"
+        ]
+      }
+    ],
+    "EXST1": [
+      {
+        "category": "励磁系统",
+        "entrypoint": "mdl_avr_ode!",
+        "source": "src/models/generator_models/avr_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dVm_dt",
+          "output_ode[local_ix[2]] = dVrll_dt",
+          "output_ode[local_ix[3]] = dVr_dt",
+          "output_ode[local_ix[4]] = dVfb_dt"
+        ],
+        "algebraic": [
+          "inner_vars[Vf_var] = Vf"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:Vm], global_index[:Vm]] = PSY.get_Tr(avr)",
+          "mass_matrix[global_index[:Vrll], global_index[:Vrll]] = PSY.get_Tb(avr)",
+          "mass_matrix[global_index[:Vr], global_index[:Vr]] = PSY.get_Ta(avr)"
+        ]
+      }
+    ],
+    "FiveMassShaft": [
+      {
+        "category": "轴系",
+        "entrypoint": "mdl_shaft_ode!",
+        "source": "src/models/generator_models/shaft_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = 2.0 * π * f0 * (ω - ω_sys)",
+          "output_ode[local_ix[2]] = (1.0 / (2.0 * H)) * ( -τe - D * (ω - 1.0) - D_34 * (ω - ω_lp) - D_45 * (ω - ω_ex) + K_lp * (δ_lp - δ) + K_ex * (δ_ex - δ) )",
+          "output_ode[local_ix[3]] = 2.0 * π * f0 * (ω_hp - ω_sys)",
+          "output_ode[local_ix[4]] = (1.0 / (2.0 * H_hp)) *",
+          "output_ode[local_ix[5]] = 2 * π * f0 * (ω_ip - ω_sys)",
+          "output_ode[local_ix[6]] = (1.0 / (2 * H_ip)) * ( -D_ip * (ω_ip - 1.0) - D_12 * (ω_ip - ω_hp) - D_23 * (ω_ip - ω_lp) + K_hp * (δ_hp - δ_ip) + K_ip * (δ_lp - δ_ip) )",
+          "output_ode[local_ix[7]] = 2.0 * π * f0 * (ω_lp - ω_sys)",
+          "output_ode[local_ix[8]] = (1.0 / (2.0 * H_lp)) * ( -D_lp * (ω_lp - 1.0) - D_23 * (ω_lp - ω_ip) - D_34 * (ω_lp - ω) + K_ip * (δ_ip - δ_lp) + K_lp * (δ - δ_lp) )",
+          "output_ode[local_ix[9]] = 2 * π * f0 * (ω_ex - ω_sys)",
+          "output_ode[local_ix[10]] = (1.0 / (2.0 * H_ex)) *"
+        ],
+        "algebraic": [],
+        "mass_matrix": []
+      }
+    ],
+    "FixedDCSource": [
+      {
+        "category": "直流侧",
+        "entrypoint": "mdl_DCside_ode!",
+        "source": "src/models/inverter_models/DCside_models.jl",
+        "derivatives": [],
+        "algebraic": [
+          "inner_vars[Vdc_var] = PSY.get_voltage(PSY.get_dc_source(dynamic_device))"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "FixedFrequency": [
+      {
+        "category": "频率估计器",
+        "entrypoint": "mdl_freq_estimator_ode!",
+        "source": "src/models/inverter_models/frequency_estimator_models.jl",
+        "derivatives": [],
+        "algebraic": [
+          "inner_vars[ω_freq_estimator_var] = frequency"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "FullMachine": [
+      {
+        "category": "同步机",
+        "entrypoint": "mdl_machine_ode!",
+        "source": "src/models/generator_models/machine_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = 2 * pi * f0 * (ψq * ω + R * i_df1d[1] + V_dq[1])",
+          "output_ode[local_ix[2]] = 2 * pi * f0 * (-ψd * ω + R * i_q1q[1] + V_dq[2])",
+          "output_ode[local_ix[3]] = -R_f * i_df1d[2] + Vf",
+          "output_ode[local_ix[4]] = -R_1d * i_df1d[3]",
+          "output_ode[local_ix[5]] = -R_1q * i_q1q[2]"
+        ],
+        "algebraic": [
+          "inner_vars[τe_var] = τ_e",
+          "inner_vars[ψd_var] = ψd",
+          "inner_vars[ψq_var] = ψq",
+          "current_r[1] += I_RI[1]",
+          "current_i[1] += I_RI[2]"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "GasTG": [
+      {
+        "category": "调速器",
+        "entrypoint": "mdl_tg_ode!",
+        "source": "src/models/generator_models/tg_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dxg1_dt",
+          "output_ode[local_ix[2]] = dxg2_dt",
+          "output_ode[local_ix[3]] = dxg3_dt"
+        ],
+        "algebraic": [
+          "inner_vars[τm_var] = P_m / ω[1]"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "HybridOutputCurrentLimiter": [
+      {
+        "category": "输出电流限幅器",
+        "entrypoint": "limit_output_current",
+        "source": "src/models/inverter_models/output_current_limiter_models.jl",
+        "derivatives": [],
+        "algebraic": [
+          "Id_cnv_ref2 = limit_value * cos(theta)",
+          "Iq_cnv_ref2 = limit_value * sin(theta)",
+          "Id_cnv_ref2 = Id_cnv_ref",
+          "Iq_cnv_ref2 = Iq_cnv_ref",
+          "Del_Vv_d = ",
+          "Del_Vv_q = "
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "HydroTurbineGov": [
+      {
+        "category": "调速器",
+        "entrypoint": "mdl_tg_ode!",
+        "source": "src/models/generator_models/tg_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dxg1_dt",
+          "output_ode[local_ix[2]] = clamp(dxg2_dt, -VELM, VELM)",
+          "output_ode[local_ix[3]] = dxg3_dt",
+          "output_ode[local_ix[4]] = (1.0 - h) / Tw"
+        ],
+        "algebraic": [
+          "inner_vars[τm_var] = ((x_g4 - q_nl) * h * At - D_T * Δω * x_g3) / ω[1]"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:x_g1], global_index[:x_g1]] = PSY.get_Tf(tg)",
+          "mass_matrix[global_index[:x_g3], global_index[:x_g3]] = PSY.get_Tg(tg)"
+        ]
+      }
+    ],
+    "IEEEST": [
+      {
+        "category": "电力系统稳定器",
+        "entrypoint": "mdl_pss_ode!",
+        "source": "src/models/generator_models/pss_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dxp1_dt",
+          "output_ode[local_ix[2]] = dxp2_dt",
+          "output_ode[local_ix[3]] = dxp3_dt",
+          "output_ode[local_ix[4]] = dxp4_dt",
+          "output_ode[local_ix[5]] = dxp5_dt",
+          "output_ode[local_ix[6]] = dxp6_dt",
+          "output_ode[local_ix[7]] = dxp7_dt"
+        ],
+        "algebraic": [
+          "inner_vars[V_pss_var] = output_pss_limiter(V_ss, V_ct, V_cl, V_cu)"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:x_p1], global_index[:x_p1]] = PSY.get_A4(pss)",
+          "mass_matrix[global_index[:x_p3], global_index[:x_p3]] = PSY.get_A2(pss)",
+          "mass_matrix[global_index[:x_p5], global_index[:x_p5]] = PSY.get_T2(pss)",
+          "mass_matrix[global_index[:x_p6], global_index[:x_p6]] = PSY.get_T4(pss)",
+          "mass_matrix[global_index[:x_p7], global_index[:x_p7]] = PSY.get_T6(pss)"
+        ]
+      }
+    ],
+    "InstantaneousOutputCurrentLimiter": [
+      {
+        "category": "输出电流限幅器",
+        "entrypoint": "limit_output_current",
+        "source": "src/models/inverter_models/output_current_limiter_models.jl",
+        "derivatives": [],
+        "algebraic": [
+          "Id_cnv_ref2 = clamp(Id_cnv_ref, -d_lim, d_lim)",
+          "Iq_cnv_ref2 = clamp(Iq_cnv_ref, -q_lim, q_lim)"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "KauraPLL": [
+      {
+        "category": "频率估计器",
+        "entrypoint": "mdl_freq_estimator_ode!",
+        "source": "src/models/inverter_models/frequency_estimator_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = low_pass(V_dq_pll[d], vpll_d, 1.0, 1.0 / ω_lp)[2]",
+          "output_ode[local_ix[2]] = low_pass(V_dq_pll[q], vpll_q, 1.0, 1.0 / ω_lp)[2]",
+          "output_ode[local_ix[3]] = dϵ_dt",
+          "output_ode[local_ix[4]] = ωb * Δω"
+        ],
+        "algebraic": [
+          "inner_vars[ω_freq_estimator_var] = Δω + ω_sys",
+          "inner_vars[θ_freq_estimator_var] = θ_pll"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "LCLFilter": [
+      {
+        "category": "变流器",
+        "entrypoint": "mdl_converter_ode!",
+        "source": "src/models/inverter_models/converter_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = Ip_binary * (1.0 / T_g) * Ip_in",
+          "output_ode[local_ix[2]] = (1.0 / T_g) * Iq_in",
+          "output_ode[local_ix[3]] = (1.0 / T_fltr) * (V_t - Vmeas)"
+        ],
+        "algebraic": [
+          "inner_vars[Vr_cnv_var] = Er_cnv",
+          "inner_vars[Vi_cnv_var] = Ei_cnv"
+        ],
+        "mass_matrix": []
+      },
+      {
+        "category": "滤波器",
+        "entrypoint": "mdl_filter_ode!",
+        "source": "src/models/inverter_models/filter_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = (Vr_cnv - Vr_filter - rf * Ir_cnv + lf * ω_sys * Ii_cnv)",
+          "output_ode[local_ix[2]] = (Vi_cnv - Vi_filter - rf * Ii_cnv - lf * ω_sys * Ir_cnv)",
+          "output_ode[local_ix[3]] = (Ir_cnv - Ir_filter + cf * ω_sys * Vi_filter)",
+          "output_ode[local_ix[4]] = (Ii_cnv - Ii_filter - cf * ω_sys * Vr_filter)",
+          "output_ode[local_ix[5]] = (Vr_filter - V_tR - rg * Ir_filter + lg * ω_sys * Ii_filter)",
+          "output_ode[local_ix[6]] = (Vi_filter - V_tI - rg * Ii_filter - lg * ω_sys * Ir_filter)"
+        ],
+        "algebraic": [
+          "inner_vars[Vr_filter_var] = Vr_filter",
+          "inner_vars[Vi_filter_var] = Vi_filter",
+          "current_r[1] += I_RI[1]",
+          "current_i[1] += I_RI[2]"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:ir_cnv], global_index[:ir_cnv]] = bool_val * PSY.get_lf(filt) / ωb",
+          "mass_matrix[global_index[:ii_cnv], global_index[:ii_cnv]] = bool_val * PSY.get_lf(filt) / ωb",
+          "mass_matrix[global_index[:vr_filter], global_index[:vr_filter]] = bool_val * PSY.get_cf(filt) / ωb",
+          "mass_matrix[global_index[:vi_filter], global_index[:vi_filter]] = bool_val * PSY.get_cf(filt) / ωb",
+          "mass_matrix[global_index[:ir_filter], global_index[:ir_filter]] = bool_val * PSY.get_lg(filt) / ωb",
+          "mass_matrix[global_index[:ii_filter], global_index[:ii_filter]] = bool_val * PSY.get_lg(filt) / ωb"
+        ]
+      }
+    ],
+    "MagnitudeOutputCurrentLimiter": [
+      {
+        "category": "输出电流限幅器",
+        "entrypoint": "limit_output_current",
+        "source": "src/models/inverter_models/output_current_limiter_models.jl",
+        "derivatives": [],
+        "algebraic": [
+          "Id_cnv_ref2 = limit_value * cos(theta)",
+          "Iq_cnv_ref2 = limit_value * sin(theta)",
+          "Id_cnv_ref2 = Id_cnv_ref",
+          "Iq_cnv_ref2 = Iq_cnv_ref"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "MarconatoMachine": [
+      {
+        "category": "同步机",
+        "entrypoint": "mdl_machine_ode!",
+        "source": "src/models/generator_models/machine_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = 2 * π * f0 * (R * i_q - ω * ψd + V_dq[2])",
+          "output_ode[local_ix[2]] = 2 * π * f0 * (R * i_d + ω * ψq + V_dq[1])",
+          "output_ode[local_ix[3]] = ((1.0 / Td0_p) * (-eq_p - (Xd - Xd_p - γd) * i_d + (1 - (T_AA / Td0_p)) * Vf))",
+          "output_ode[local_ix[4]] = (1.0 / Tq0_p) * (-ed_p + (Xq - Xq_p - γq) * i_q)",
+          "output_ode[local_ix[5]] = ((1.0 / Td0_pp) * (-eq_pp + eq_p - (Xd_p - Xd_pp + γd) * i_d + (T_AA / Td0_p) * Vf))",
+          "output_ode[local_ix[6]] = (1.0 / Tq0_pp) * (-ed_pp + ed_p + (Xq_p - Xq_pp + γq) * i_q)"
+        ],
+        "algebraic": [
+          "inner_vars[τe_var] = τ_e",
+          "current_r[1] += I_RI[1]",
+          "current_i[1] += I_RI[2]"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "OneDOneQMachine": [
+      {
+        "category": "同步机",
+        "entrypoint": "mdl_machine_ode!",
+        "source": "src/models/generator_models/machine_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = (1.0 / Td0_p) * (-eq_p - (Xd - Xd_p) * i_d + Vf)",
+          "output_ode[local_ix[2]] = (1.0 / Tq0_p) * (-ed_p + (Xq - Xq_p) * i_q)"
+        ],
+        "algebraic": [
+          "inner_vars[τe_var] = Pe",
+          "current_r[1] += I_RI[1]",
+          "current_i[1] += I_RI[2]"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "PIDGOV": [
+      {
+        "category": "调速器",
+        "entrypoint": "mdl_tg_ode!",
+        "source": "src/models/generator_models/tg_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dxg1_dt",
+          "output_ode[local_ix[2]] = dxg2_dt",
+          "output_ode[local_ix[3]] = dxg3_dt",
+          "output_ode[local_ix[4]] = dxg4_dt",
+          "output_ode[local_ix[5]] = dxg5_dt",
+          "output_ode[local_ix[6]] = dxg6_dt",
+          "output_ode[local_ix[7]] = dxg7_dt"
+        ],
+        "algebraic": [
+          "inner_vars[τm_var] = P_m / ω[1]"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:x_g1], global_index[:x_g1]] = PSY.get_T_reg(tg)",
+          "mass_matrix[global_index[:x_g3], global_index[:x_g3]] = PSY.get_Ta(tg)",
+          "mass_matrix[global_index[:x_g4], global_index[:x_g4]] = PSY.get_Ta(tg)",
+          "mass_matrix[global_index[:x_g5], global_index[:x_g5]] = PSY.get_Ta(tg)"
+        ]
+      }
+    ],
+    "PSS2A": [
+      {
+        "category": "电力系统稳定器",
+        "entrypoint": "mdl_pss_ode!",
+        "source": "src/models/generator_models/pss_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dxp1_dt",
+          "output_ode[local_ix[2]] = dxp2_dt",
+          "output_ode[local_ix[3]] = dxp3_dt",
+          "output_ode[local_ix[4]] = dxp4_dt",
+          "output_ode[local_ix[5]] = dxp5_dt",
+          "output_ode[local_ix[6]] = dxp6_dt",
+          "output_ode[local_ix[7]] = dxp7_dt",
+          "output_ode[local_ix[8]] = dxp8_dt",
+          "output_ode[local_ix[9]] = dxp9_dt",
+          "output_ode[local_ix[10]] = dxp10_dt",
+          "output_ode[local_ix[11]] = dxp11_dt",
+          "output_ode[local_ix[12]] = dxp12_dt",
+          "output_ode[local_ix[13]] = dxp13_dt",
+          "output_ode[local_ix[14]] = dxp14_dt",
+          "output_ode[local_ix[15]] = dxp15_dt",
+          "output_ode[local_ix[16]] = dxp16_dt"
+        ],
+        "algebraic": [
+          "inner_vars[V_pss_var] = clamp(yll_2, Vst_min, Vst_max)"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "PSS2B": [
+      {
+        "category": "电力系统稳定器",
+        "entrypoint": "mdl_pss_ode!",
+        "source": "src/models/generator_models/pss_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dxp1_dt",
+          "output_ode[local_ix[2]] = dxp2_dt",
+          "output_ode[local_ix[3]] = dxp3_dt",
+          "output_ode[local_ix[4]] = dxp4_dt",
+          "output_ode[local_ix[5]] = dxp5_dt",
+          "output_ode[local_ix[6]] = dxp6_dt",
+          "output_ode[local_ix[7]] = dxp7_dt",
+          "output_ode[local_ix[8]] = dxp8_dt",
+          "output_ode[local_ix[9]] = dxp9_dt",
+          "output_ode[local_ix[10]] = dxp10_dt",
+          "output_ode[local_ix[11]] = dxp11_dt",
+          "output_ode[local_ix[12]] = dxp12_dt",
+          "output_ode[local_ix[13]] = dxp13_dt",
+          "output_ode[local_ix[14]] = dxp14_dt",
+          "output_ode[local_ix[15]] = dxp15_dt",
+          "output_ode[local_ix[16]] = dxp16_dt",
+          "output_ode[local_ix[17]] = dxp17_dt"
+        ],
+        "algebraic": [
+          "inner_vars[V_pss_var] = clamp(yll_3, Vst_min, Vst_max)"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "PSS2C": [
+      {
+        "category": "电力系统稳定器",
+        "entrypoint": "mdl_pss_ode!",
+        "source": "src/models/generator_models/pss_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dxp1_dt",
+          "output_ode[local_ix[2]] = dxp2_dt",
+          "output_ode[local_ix[3]] = dxp3_dt",
+          "output_ode[local_ix[4]] = dxp4_dt",
+          "output_ode[local_ix[5]] = dxp5_dt",
+          "output_ode[local_ix[6]] = dxp6_dt",
+          "output_ode[local_ix[7]] = dxp7_dt",
+          "output_ode[local_ix[8]] = dxp8_dt",
+          "output_ode[local_ix[9]] = dxp9_dt",
+          "output_ode[local_ix[10]] = dxp10_dt",
+          "output_ode[local_ix[11]] = dxp11_dt",
+          "output_ode[local_ix[12]] = dxp12_dt",
+          "output_ode[local_ix[13]] = dxp13_dt",
+          "output_ode[local_ix[14]] = dxp14_dt",
+          "output_ode[local_ix[15]] = dxp15_dt",
+          "output_ode[local_ix[16]] = dxp16_dt",
+          "output_ode[local_ix[17]] = dxp17_dt",
+          "output_ode[local_ix[18]] = dxp18_dt",
+          "output_ode[local_ix[19]] = 0.0"
+        ],
+        "algebraic": [
+          "inner_vars[V_pss_var] = VPSS * hysteresis_binary_logic"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "PSSFixed": [
+      {
+        "category": "电力系统稳定器",
+        "entrypoint": "mdl_pss_ode!",
+        "source": "src/models/generator_models/pss_models.jl",
+        "derivatives": [],
+        "algebraic": [
+          "inner_vars[V_pss_var] = PSY.get_V_pss(PSY.get_pss(dynamic_device))"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "PeriodicVariableSource": [
+      {
+        "category": "聚合动态设备",
+        "entrypoint": "device!",
+        "source": "src/models/device.jl",
+        "derivatives": [
+          "output_ode[1] = dV",
+          "output_ode[2] = dθ"
+        ],
+        "algebraic": [
+          "current_r[1] += R_th * (V_R - voltage_r[1]) / Zmag + X_th * (V_I - voltage_i[1]) / Zmag",
+          "current_i[1] += R_th * (V_I - voltage_i[1]) / Zmag - X_th * (V_R - voltage_r[1]) / Zmag"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "RECurrentControlB": [
+      {
+        "category": "内环控制器",
+        "entrypoint": "_mdl_ode_RE_inner_controller_B!",
+        "source": "src/models/inverter_models/inner_control_models.jl",
+        "derivatives": [
+          "inner_controller_ode[1] = low_pass_mass_matrix(V_t, Vt_filt, 1.0, T_rv)[2]",
+          "inner_controller_ode[2] = low_pass_mass_matrix(Iq_oc, I_icv, 1.0, T_iq)[2]"
+        ],
+        "algebraic": [
+          "inner_vars[Id_ic_var] = Ip_cmd",
+          "inner_vars[Iq_ic_var] = Iq_cmd"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:Vt_filt], global_index[:Vt_filt]] = PSY.get_T_rv(inner_control)",
+          "mass_matrix[global_index[:I_icv], global_index[:I_icv]] = PSY.get_T_iq(inner_control)"
+        ]
+      },
+      {
+        "category": "内环控制器",
+        "entrypoint": "_mdl_ode_RE_inner_controller_B!",
+        "source": "src/models/inverter_models/inner_control_models.jl",
+        "derivatives": [
+          "inner_controller_ode[1] = dVtfilt_dt",
+          "inner_controller_ode[2] = dξicv_dt"
+        ],
+        "algebraic": [
+          "inner_vars[Id_ic_var] = Ip_cmd",
+          "inner_vars[Iq_ic_var] = Iq_cmd"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:Vt_filt], global_index[:Vt_filt]] = PSY.get_T_rv(inner_control)",
+          "mass_matrix[global_index[:I_icv], global_index[:I_icv]] = PSY.get_T_iq(inner_control)"
+        ]
+      }
+    ],
+    "RLFilter": [
+      {
+        "category": "变流器",
+        "entrypoint": "mdl_converter_ode!",
+        "source": "src/models/inverter_models/converter_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = Ip_binary * (1.0 / T_g) * Ip_in",
+          "output_ode[local_ix[2]] = (1.0 / T_g) * Iq_in",
+          "output_ode[local_ix[3]] = (1.0 / T_fltr) * (V_t - Vmeas)"
+        ],
+        "algebraic": [
+          "inner_vars[Ir_cnv_var] = Ir_cnv",
+          "inner_vars[Ii_cnv_var] = Ii_cnv",
+          "inner_vars[Vr_cnv_var] = Vr_cnv",
+          "inner_vars[Vi_cnv_var] = Vi_cnv"
+        ],
+        "mass_matrix": []
+      },
+      {
+        "category": "滤波器",
+        "entrypoint": "mdl_filter_ode!",
+        "source": "src/models/inverter_models/filter_models.jl",
+        "derivatives": [],
+        "algebraic": [
+          "inner_vars[Ir_inv_var] = Ir_filt",
+          "inner_vars[Ii_inv_var] = Ii_filt",
+          "current_r[1] += ratio_power * Ir_filt",
+          "current_i[1] += ratio_power * Ii_filt"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "ReactivePowerDroop": [
+      {
+        "category": "外环控制器",
+        "entrypoint": "mdl_outer_ode!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = ωb * (ω_oc - ω_sys)",
+          "output_ode[local_ix[2]] = (p_ref / Ta - p_elec_out / Ta - kd * (ω_oc - ω_pll) / Ta - kω * (ω_oc - ω_ref) / Ta)",
+          "output_ode[local_ix[3]] = dqm_dt"
+        ],
+        "algebraic": [
+          "inner_vars[θ_oc_var] = θ_oc",
+          "inner_vars[ω_oc_var] = ω_oc",
+          "inner_vars[V_oc_var] = V_ref + kq * (q_ref - qm)"
+        ],
+        "mass_matrix": []
+      },
+      {
+        "category": "外环控制器",
+        "entrypoint": "mdl_outer_ode!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = bool_val * ωb * (ω_oc - ω_sys)",
+          "output_ode[local_ix[2]] = dpm_dt",
+          "output_ode[local_ix[3]] = dqm_dt"
+        ],
+        "algebraic": [
+          "inner_vars[θ_oc_var] = θ_oc",
+          "inner_vars[ω_oc_var] = ω_oc",
+          "inner_vars[V_oc_var] = V_ref + kq * (q_ref - qm)"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "ReactivePowerPI": [
+      {
+        "category": "外环控制器",
+        "entrypoint": "mdl_outer_ode!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dσpoc_dt",
+          "output_ode[local_ix[2]] = dpoc_dt",
+          "output_ode[local_ix[3]] = dσqoc_dt",
+          "output_ode[local_ix[4]] = dqoc_dt"
+        ],
+        "algebraic": [
+          "inner_vars[θ_oc_var] = θ_pll",
+          "inner_vars[ω_oc_var] = ω_pll",
+          "inner_vars[Id_oc_var] = Id_pi",
+          "inner_vars[Iq_oc_var] = -Iq_pi"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "ReactiveRenewableControllerAB": [
+      {
+        "category": "外环控制器",
+        "entrypoint": "_mdl_ode_RE_active_controller_AB!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "active_controller_ode[1] = dpflt_dt",
+          "active_controller_ode[2] = dξP_dt",
+          "active_controller_ode[3] = dpext_dt",
+          "active_controller_ode[4] = dpord_dt"
+        ],
+        "algebraic": [
+          "inner_vars[Id_oc_var] = p_ord_sat / max(Vt_filt, VOLTAGE_DIVISION_LOWER_BOUND)"
+        ],
+        "mass_matrix": []
+      },
+      {
+        "category": "外环控制器",
+        "entrypoint": "_mdl_ode_RE_active_controller_AB!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "active_controller_ode[1] = dpord_dt"
+        ],
+        "algebraic": [
+          "inner_vars[Id_oc_var] = p_ord / max(Vt_filt, VOLTAGE_DIVISION_LOWER_BOUND)"
+        ],
+        "mass_matrix": []
+      },
+      {
+        "category": "外环控制器",
+        "entrypoint": "_mdl_ode_RE_reactive_controller_AB!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "reactive_controller_ode[1] = dqflt_dt",
+          "reactive_controller_ode[2] = dξqoc_dt",
+          "reactive_controller_ode[3] = dqLL_dt",
+          "reactive_controller_ode[4] = dξQ_dt"
+        ],
+        "algebraic": [
+          "inner_vars[V_oc_var] = V_pi_sat - Vt_filt",
+          "inner_vars[Iq_oc_var] = Q_ext / max(Vt_filt, VOLTAGE_DIVISION_LOWER_BOUND)"
+        ],
+        "mass_matrix": []
+      },
+      {
+        "category": "外环控制器",
+        "entrypoint": "_mdl_ode_RE_reactive_controller_AB!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "reactive_controller_ode[1] = dqflt_dt",
+          "reactive_controller_ode[2] = dξqoc_dt",
+          "reactive_controller_ode[3] = dqLL_dt"
+        ],
+        "algebraic": [
+          "inner_vars[V_oc_var] = Q_ext - Vt_filt",
+          "inner_vars[Iq_oc_var] = Q_ext / max(Vt_filt, VOLTAGE_DIVISION_LOWER_BOUND)"
+        ],
+        "mass_matrix": []
+      },
+      {
+        "category": "外环控制器",
+        "entrypoint": "_mdl_ode_RE_reactive_controller_AB!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "reactive_controller_ode[1] = dVcflt_dt",
+          "reactive_controller_ode[2] = dξqoc_dt",
+          "reactive_controller_ode[3] = dqLL_dt",
+          "reactive_controller_ode[4] = dξQ_dt"
+        ],
+        "algebraic": [
+          "inner_vars[V_oc_var] = V_pi_sat - Vt_filt",
+          "inner_vars[Iq_oc_var] = Q_ext / max(Vt_filt, VOLTAGE_DIVISION_LOWER_BOUND)"
+        ],
+        "mass_matrix": []
+      },
+      {
+        "category": "外环控制器",
+        "entrypoint": "_mdl_ode_RE_reactive_controller_AB!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "reactive_controller_ode[1] = dVcflt_dt",
+          "reactive_controller_ode[2] = dξqoc_dt",
+          "reactive_controller_ode[3] = dqLL_dt"
+        ],
+        "algebraic": [
+          "inner_vars[V_oc_var] = V_pi_sat - Vt_filt",
+          "inner_vars[Iq_oc_var] = Q_ext / max(Vt_filt, VOLTAGE_DIVISION_LOWER_BOUND)"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "ReactiveVirtualOscillator": [
+      {
+        "category": "外环控制器",
+        "entrypoint": "mdl_outer_ode!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = bool_val * ωb * (ω_oc - ω_sys)",
+          "output_ode[local_ix[2]] = dEoc_dt"
+        ],
+        "algebraic": [
+          "inner_vars[θ_oc_var] = θ_oc",
+          "inner_vars[ω_oc_var] = ω_oc",
+          "inner_vars[V_oc_var] = E_oc"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "ReducedOrderPLL": [
+      {
+        "category": "频率估计器",
+        "entrypoint": "mdl_freq_estimator_ode!",
+        "source": "src/models/inverter_models/frequency_estimator_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = low_pass(V_dq_pll[q], vpll_q, 1.0, 1.0 / ω_lp)[2]",
+          "output_ode[local_ix[2]] = dϵ_dt",
+          "output_ode[local_ix[3]] = ωb * Δω"
+        ],
+        "algebraic": [
+          "inner_vars[ω_freq_estimator_var] = Δω + ω_sys",
+          "inner_vars[θ_freq_estimator_var] = θ_pll"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "RenewableEnergyConverterTypeA": [
+      {
+        "category": "变流器",
+        "entrypoint": "mdl_converter_ode!",
+        "source": "src/models/inverter_models/converter_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = Ip_binary * (1.0 / T_g) * Ip_in",
+          "output_ode[local_ix[2]] = (1.0 / T_g) * Iq_in",
+          "output_ode[local_ix[3]] = (1.0 / T_fltr) * (V_t - Vmeas)"
+        ],
+        "algebraic": [
+          "inner_vars[Ir_cnv_var] = Ir_cnv",
+          "inner_vars[Ii_cnv_var] = Ii_cnv",
+          "inner_vars[Vr_cnv_var] = Vr_cnv",
+          "inner_vars[Vi_cnv_var] = Vi_cnv"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "RenewableEnergyVoltageConverterTypeA": [
+      {
+        "category": "变流器",
+        "entrypoint": "mdl_converter_ode!",
+        "source": "src/models/inverter_models/converter_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = Ip_binary * (1.0 / T_g) * Ip_in",
+          "output_ode[local_ix[2]] = (1.0 / T_g) * Iq_in",
+          "output_ode[local_ix[3]] = (1.0 / T_fltr) * (V_t - Vmeas)"
+        ],
+        "algebraic": [
+          "inner_vars[Vr_cnv_var] = Er_cnv",
+          "inner_vars[Vi_cnv_var] = Ei_cnv"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "SCRX": [
+      {
+        "category": "励磁系统",
+        "entrypoint": "mdl_avr_ode!",
+        "source": "src/models/generator_models/avr_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dVr1_dt",
+          "output_ode[local_ix[2]] = dVr2_dt"
+        ],
+        "algebraic": [
+          "inner_vars[Vf_var] = E_fd"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:Vr1], global_index[:Vr1]] = PSY.get_Tb(avr)",
+          "mass_matrix[global_index[:Vr2], global_index[:Vr2]] = PSY.get_Te(avr)"
+        ]
+      }
+    ],
+    "SEXS": [
+      {
+        "category": "励磁系统",
+        "entrypoint": "mdl_avr_ode!",
+        "source": "src/models/generator_models/avr_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dVf_dt",
+          "output_ode[local_ix[2]] = dVr_dt"
+        ],
+        "algebraic": [
+          "inner_vars[Vf_var] = Vf"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:Vf], global_index[:Vf]] = PSY.get_Te(avr)",
+          "mass_matrix[global_index[:Vr], global_index[:Vr]] = PSY.get_Tb(avr)"
+        ]
+      }
+    ],
+    "ST6B": [
+      {
+        "category": "励磁系统",
+        "entrypoint": "mdl_avr_ode!",
+        "source": "src/models/generator_models/avr_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dVm_dt",
+          "output_ode[local_ix[2]] = dx_i",
+          "output_ode[local_ix[3]] = dx_d",
+          "output_ode[local_ix[4]] = dVg"
+        ],
+        "algebraic": [
+          "inner_vars[Vf_var] = E_fd"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:Vm], global_index[:Vm]] = PSY.get_Tr(avr)",
+          "mass_matrix[global_index[:x_d], global_index[:x_d]] = PSY.get_T_da(avr)"
+        ]
+      }
+    ],
+    "ST8C": [
+      {
+        "category": "励磁系统",
+        "entrypoint": "mdl_avr_ode!",
+        "source": "src/models/generator_models/avr_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dVm_dt",
+          "output_ode[local_ix[2]] = dxa1_dt",
+          "output_ode[local_ix[3]] = dxa2_dt",
+          "output_ode[local_ix[4]] = dxa3_dt",
+          "output_ode[local_ix[5]] = dxa4_dt"
+        ],
+        "algebraic": [
+          "inner_vars[Vf_var] = Efd"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:Vm], global_index[:Vm]] = PSY.get_Tr(avr)",
+          "mass_matrix[global_index[:x_a3], global_index[:x_a3]] = PSY.get_T_a(avr)",
+          "mass_matrix[global_index[:x_a4], global_index[:x_a4]] = PSY.get_T_f(avr)"
+        ]
+      }
+    ],
+    "STAB1": [
+      {
+        "category": "电力系统稳定器",
+        "entrypoint": "mdl_pss_ode!",
+        "source": "src/models/generator_models/pss_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dxp1_dt",
+          "output_ode[local_ix[2]] = dxp2_dt",
+          "output_ode[local_ix[3]] = dxp3_dt"
+        ],
+        "algebraic": [
+          "inner_vars[V_pss_var] = V_ss"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "SalientPoleExponential": [
+      {
+        "category": "同步机",
+        "entrypoint": "mdl_machine_ode!",
+        "source": "src/models/generator_models/machine_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = (1.0 / Td0_p) * (Vf - Xad_Ifd)",
+          "output_ode[local_ix[2]] = (1.0 / Td0_pp) * (-ψ_kd + eq_p - (Xd_p - Xl) * I_d)",
+          "output_ode[local_ix[3]] = (1.0 / Tq0_pp) * (-ψq_pp + (Xq - Xq_pp) * I_q - Se * γ_qd * ψq_pp)"
+        ],
+        "algebraic": [
+          "inner_vars[τe_var] = τ_e",
+          "inner_vars[Xad_Ifd_var] = Xad_Ifd",
+          "current_r[1] += I_RI[1]",
+          "current_i[1] += I_RI[2]"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "SalientPoleQuadratic": [
+      {
+        "category": "同步机",
+        "entrypoint": "mdl_machine_ode!",
+        "source": "src/models/generator_models/machine_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = (1.0 / Td0_p) * (Vf - Xad_Ifd)",
+          "output_ode[local_ix[2]] = (1.0 / Td0_pp) * (-ψ_kd + eq_p - (Xd_p - Xl) * I_d)",
+          "output_ode[local_ix[3]] = (1.0 / Tq0_pp) * (-ψq_pp - (Xq - Xq_pp) * I_q)"
+        ],
+        "algebraic": [
+          "inner_vars[τe_var] = τ_e",
+          "inner_vars[Xad_Ifd_var] = Xad_Ifd",
+          "current_r[1] += I_RI[1]",
+          "current_i[1] += I_RI[2]"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "SaturationOutputCurrentLimiter": [
+      {
+        "category": "输出电流限幅器",
+        "entrypoint": "limit_output_current",
+        "source": "src/models/inverter_models/output_current_limiter_models.jl",
+        "derivatives": [],
+        "algebraic": [
+          "Id_cnv_ref2 = limit_value * cos(theta)",
+          "Iq_cnv_ref2 = limit_value * sin(theta)",
+          "Id_cnv_ref2 = Id_cnv_ref",
+          "Iq_cnv_ref2 = Iq_cnv_ref",
+          "Del_Vv_d = gain * (Id_cnv_ref - Id_cnv_ref2)",
+          "Del_Vv_q = gain * (Iq_cnv_ref - Iq_cnv_ref2)"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "SauerPaiMachine": [
+      {
+        "category": "同步机",
+        "entrypoint": "mdl_machine_ode!",
+        "source": "src/models/generator_models/machine_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = 2 * π * f0 * (R * i_q - ω * ψd + V_dq[2])",
+          "output_ode[local_ix[2]] = 2 * π * f0 * (R * i_d + ω * ψq + V_dq[1])",
+          "output_ode[local_ix[3]] = (1.0 / Td0_p) *",
+          "output_ode[local_ix[4]] = (1.0 / Tq0_p) *",
+          "output_ode[local_ix[5]] = (1.0 / Td0_pp) * (-ψd_pp + eq_p - (Xd_p - Xl) * i_d)",
+          "output_ode[local_ix[6]] = (1.0 / Tq0_pp) * (-ψq_pp - ed_p - (Xq_p - Xl) * i_q)"
+        ],
+        "algebraic": [
+          "inner_vars[τe_var] = τ_e",
+          "current_r[1] += I_RI[1]",
+          "current_i[1] += I_RI[2]"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "SimpleAFMachine": [
+      {
+        "category": "同步机",
+        "entrypoint": "mdl_machine_ode!",
+        "source": "src/models/generator_models/machine_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = (1.0 / Td0_p) * (-eq_p + (Xd - Xd_p) * i_d + Vf)",
+          "output_ode[local_ix[2]] = (1.0 / Tq0_p) * (-ed_p + (Xq - Xq_p) * i_q)",
+          "output_ode[local_ix[3]] = (1.0 / Td0_pp) * (-eq_pp + eq_p - (Xd_p - Xd_pp) * i_d)",
+          "output_ode[local_ix[4]] = (1.0 / Tq0_pp) * (-ed_pp + ed_p + (Xq_p - Xq_pp) * i_q)"
+        ],
+        "algebraic": [
+          "inner_vars[τe_var] = τ_e",
+          "current_r[1] += I_RI[1]",
+          "current_i[1] += I_RI[2]"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "SimpleFullMachine": [
+      {
+        "category": "同步机",
+        "entrypoint": "mdl_machine_ode!",
+        "source": "src/models/generator_models/machine_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = -R_f * i_df1d[2] + Vf",
+          "output_ode[local_ix[2]] = -R_1d * i_df1d[3]",
+          "output_ode[local_ix[3]] = -R_1q * i_q1q[2]"
+        ],
+        "algebraic": [
+          "inner_vars[τe_var] = τ_e",
+          "inner_vars[ψd_var] = ψd",
+          "inner_vars[ψq_var] = ψq",
+          "current_r[1] += I_RI[1]",
+          "current_i[1] += I_RI[2]"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "SimpleMarconatoMachine": [
+      {
+        "category": "同步机",
+        "entrypoint": "mdl_machine_ode!",
+        "source": "src/models/generator_models/machine_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = ((1.0 / Td0_p) * (-eq_p - (Xd - Xd_p - γd) * i_d + (1 - (T_AA / Td0_p)) * Vf))",
+          "output_ode[local_ix[2]] = (1.0 / Tq0_p) * (-ed_p + (Xq - Xq_p - γq) * i_q)",
+          "output_ode[local_ix[3]] = ((1.0 / Td0_pp) * (-eq_pp + eq_p - (Xd_p - Xd_pp + γd) * i_d + (T_AA / Td0_p) * Vf))",
+          "output_ode[local_ix[4]] = (1.0 / Tq0_pp) * (-ed_pp + ed_p + (Xq_p - Xq_pp + γq) * i_q)"
+        ],
+        "algebraic": [
+          "inner_vars[τe_var] = τ_e",
+          "current_r[1] += I_RI[1]",
+          "current_i[1] += I_RI[2]"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "SimplifiedSingleCageInductionMachine": [
+      {
+        "category": "聚合动态设备",
+        "entrypoint": "device!",
+        "source": "src/models/device.jl",
+        "derivatives": [
+          "output_ode[1] = 2.0 * pi * f0 * (v_qr - (sys_ω - ωr) * ψ_dr - R_r * i_qr)",
+          "output_ode[2] = 2.0 * pi * f0 * (v_dr + (sys_ω - ωr) * ψ_qr - R_r * i_dr)",
+          "output_ode[3] = 1.0 / (2.0 * H) * (τ_e - τ_m0 * (A * ωr^2 + B * ωr + C))"
+        ],
+        "algebraic": [
+          "current_r[1] -= (base_power / Sbase) * (i_ds - v_qs * B_sh)",
+          "current_i[1] -= (base_power / Sbase) * (i_qs + v_ds * B_sh)"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "SingleCageInductionMachine": [
+      {
+        "category": "聚合动态设备",
+        "entrypoint": "device!",
+        "source": "src/models/device.jl",
+        "derivatives": [
+          "output_ode[1] = 2.0 * pi * f0 * (v_qs - sys_ω * ψ_ds - R_s * i_qs)",
+          "output_ode[2] = 2.0 * pi * f0 * (v_ds + sys_ω * ψ_qs - R_s * i_ds)",
+          "output_ode[3] = 2.0 * pi * f0 * (v_qr - (sys_ω - ωr) * ψ_dr + R_r / X_lr * (ψ_mq - ψ_qr))",
+          "output_ode[4] = 2.0 * pi * f0 * (v_dr + (sys_ω - ωr) * ψ_qr + R_r / X_lr * (ψ_md - ψ_dr))",
+          "output_ode[5] = 1.0 / (2.0 * H) * (τ_e - τ_m0 * (A * ωr^2 + B * ωr + C))"
+        ],
+        "algebraic": [
+          "current_r[1] -= (base_power / Sbase) * (i_ds - v_qs * B_sh)",
+          "current_i[1] -= (base_power / Sbase) * (i_qs + v_ds * B_sh)"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "SingleMass": [
+      {
+        "category": "轴系",
+        "entrypoint": "mdl_shaft_ode!",
+        "source": "src/models/generator_models/shaft_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = 2 * π * f0 * (ω - ω_sys)",
+          "output_ode[local_ix[2]] = (1 / (2 * H)) * (τm - τe - D * (ω - 1.0) / ω)"
+        ],
+        "algebraic": [],
+        "mass_matrix": []
+      }
+    ],
+    "Source": [
+      {
+        "category": "电源",
+        "entrypoint": "mdl_source!",
+        "source": "src/models/source_models.jl",
+        "derivatives": [],
+        "algebraic": [
+          "current_r[1] += R_th * (V_R - voltage_r) / Zmag + X_th * (V_I - voltage_i) / Zmag",
+          "current_i[1] += R_th * (V_I - voltage_i) / Zmag - X_th * (V_R - voltage_r) / Zmag"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "StandardLoad": [
+      {
+        "category": "负荷",
+        "entrypoint": "mdl_zip_load!",
+        "source": "src/models/load_models.jl",
+        "derivatives": [],
+        "algebraic": [
+          "current_r[1] += -(Iz_re + Ii_re + Ip_re + Ir_exp)",
+          "current_i[1] += -(Iz_im + Ii_im + Ip_im + Ii_exp)"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "SteamTurbineGov1": [
+      {
+        "category": "调速器",
+        "entrypoint": "mdl_tg_ode!",
+        "source": "src/models/generator_models/tg_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dxg1_dt",
+          "output_ode[local_ix[2]] = dxg2_dt"
+        ],
+        "algebraic": [
+          "inner_vars[τm_var] = P_m / ω[1]"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "TGFixed": [
+      {
+        "category": "调速器",
+        "entrypoint": "mdl_tg_ode!",
+        "source": "src/models/generator_models/tg_models.jl",
+        "derivatives": [],
+        "algebraic": [
+          "inner_vars[τm_var] = P_ref * PSY.get_efficiency(PSY.get_prime_mover(device))"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "TGSimple": [
+      {
+        "category": "调速器",
+        "entrypoint": "mdl_tg_ode!",
+        "source": "src/models/generator_models/tg_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = (1.0 / Tm) * (droop_τ - τm)"
+        ],
+        "algebraic": [
+          "inner_vars[τm_var] = τm"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "TGTypeI": [
+      {
+        "category": "调速器",
+        "entrypoint": "mdl_tg_ode!",
+        "source": "src/models/generator_models/tg_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dxg1_dt",
+          "output_ode[local_ix[2]] = dxg2_dt",
+          "output_ode[local_ix[3]] = dxg3_dt"
+        ],
+        "algebraic": [
+          "inner_vars[τm_var] = τ_m"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "TGTypeII": [
+      {
+        "category": "调速器",
+        "entrypoint": "mdl_tg_ode!",
+        "source": "src/models/generator_models/tg_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dxg_dt"
+        ],
+        "algebraic": [
+          "inner_vars[τm_var] = τ_m"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "VirtualInertia": [
+      {
+        "category": "外环控制器",
+        "entrypoint": "mdl_outer_ode!",
+        "source": "src/models/inverter_models/outer_control_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = ωb * (ω_oc - ω_sys)",
+          "output_ode[local_ix[2]] = (p_ref / Ta - p_elec_out / Ta - kd * (ω_oc - ω_pll) / Ta - kω * (ω_oc - ω_ref) / Ta)",
+          "output_ode[local_ix[3]] = dqm_dt"
+        ],
+        "algebraic": [
+          "inner_vars[θ_oc_var] = θ_oc",
+          "inner_vars[ω_oc_var] = ω_oc",
+          "inner_vars[V_oc_var] = V_ref + kq * (q_ref - qm)"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "VoltageModeControl": [
+      {
+        "category": "内环控制器",
+        "entrypoint": "mdl_inner_ode!",
+        "source": "src/models/inverter_models/inner_control_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dξd_dt",
+          "output_ode[local_ix[2]] = dξq_dt",
+          "output_ode[local_ix[3]] = dγd_dt",
+          "output_ode[local_ix[4]] = dγq_dt",
+          "output_ode[local_ix[5]] = low_pass(V_dq_filter[d], ϕ_d, 1.0, 1.0 / ωad)[2]",
+          "output_ode[local_ix[6]] = low_pass(V_dq_filter[q], ϕ_q, 1.0, 1.0 / ωad)[2]"
+        ],
+        "algebraic": [
+          "inner_vars[md_var] = Vd_cnv_ref / Vdc",
+          "inner_vars[mq_var] = Vq_cnv_ref / Vdc"
+        ],
+        "mass_matrix": []
+      }
+    ],
+    "WPIDHY": [
+      {
+        "category": "调速器",
+        "entrypoint": "mdl_tg_ode!",
+        "source": "src/models/generator_models/tg_models.jl",
+        "derivatives": [
+          "output_ode[local_ix[1]] = dxg1_dt",
+          "output_ode[local_ix[2]] = dxg2_dt",
+          "output_ode[local_ix[3]] = dxg3_dt",
+          "output_ode[local_ix[4]] = dxg4_dt",
+          "output_ode[local_ix[5]] = dxg5_dt",
+          "output_ode[local_ix[6]] = dxg6_dt",
+          "output_ode[local_ix[7]] = dxg7_dt"
+        ],
+        "algebraic": [
+          "inner_vars[τm_var] = P_m / ω[1]"
+        ],
+        "mass_matrix": [
+          "mass_matrix[global_index[:x_g1], global_index[:x_g1]] = PSY.get_T_reg(tg)"
+        ]
+      }
+    ]
+  }
+}

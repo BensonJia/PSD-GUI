@@ -1,0 +1,182 @@
+[[components]]
+role = "network"
+entrypoints = ["network_model"]
+source = "models/network_model.jl"
+type = "current_injection_balance"
+path = "network"
+states = []
+[[components]]
+role = "system_assembly"
+entrypoints = ["system_mass_matrix!", "system_residual!"]
+source = "models/system.jl"
+type = "system_model"
+path = "system"
+states = []
+[[components]]
+role = "dynamic_generator"
+entrypoints = ["device!"]
+source = "models/device.jl"
+type = "DynamicGenerator{AndersonFouadMachine, SingleMass, AVRTypeII, TGTypeI, PSSFixed}"
+path = "injections/generator-3-1"
+states = ["ψq", "ψd", "eq_p", "ed_p", "eq_pp", "ed_pp", "δ", "ω", "Vf", "Vr1", "Vr2", "Vm", "x_g1", "x_g2", "x_g3"]
+[[components]]
+role = "avr"
+entrypoints = ["mdl_avr_ode!"]
+source = "models/generator_models/avr_models.jl"
+type = "AVRTypeII"
+path = "injections/generator-3-1/avr"
+states = ["Vf", "Vr1", "Vr2", "Vm"]
+[[components]]
+role = "machine"
+entrypoints = ["mdl_machine_ode!"]
+source = "models/generator_models/machine_models.jl"
+type = "AndersonFouadMachine"
+path = "injections/generator-3-1/machine"
+states = ["ψq", "ψd", "eq_p", "ed_p", "eq_pp", "ed_pp"]
+[[components]]
+role = "governor"
+entrypoints = ["mdl_tg_ode!"]
+source = "models/generator_models/tg_models.jl"
+type = "TGTypeI"
+path = "injections/generator-3-1/prime_mover"
+states = ["x_g1", "x_g2", "x_g3"]
+[[components]]
+role = "pss"
+entrypoints = ["mdl_pss_ode!"]
+source = "models/generator_models/pss_models.jl"
+type = "PSSFixed"
+path = "injections/generator-3-1/pss"
+states = []
+[[components]]
+role = "shaft"
+entrypoints = ["mdl_shaft_ode!"]
+source = "models/generator_models/shaft_models.jl"
+type = "SingleMass"
+path = "injections/generator-3-1/shaft"
+states = ["δ", "ω"]
+[[components]]
+role = "dynamic_generator"
+entrypoints = ["device!"]
+source = "models/device.jl"
+type = "DynamicGenerator{AndersonFouadMachine, SingleMass, AVRTypeII, TGTypeI, PSSFixed}"
+path = "injections/generator-1-1"
+states = ["ψq", "ψd", "eq_p", "ed_p", "eq_pp", "ed_pp", "δ", "ω", "Vf", "Vr1", "Vr2", "Vm", "x_g1", "x_g2", "x_g3"]
+[[components]]
+role = "avr"
+entrypoints = ["mdl_avr_ode!"]
+source = "models/generator_models/avr_models.jl"
+type = "AVRTypeII"
+path = "injections/generator-1-1/avr"
+states = ["Vf", "Vr1", "Vr2", "Vm"]
+[[components]]
+role = "machine"
+entrypoints = ["mdl_machine_ode!"]
+source = "models/generator_models/machine_models.jl"
+type = "AndersonFouadMachine"
+path = "injections/generator-1-1/machine"
+states = ["ψq", "ψd", "eq_p", "ed_p", "eq_pp", "ed_pp"]
+[[components]]
+role = "governor"
+entrypoints = ["mdl_tg_ode!"]
+source = "models/generator_models/tg_models.jl"
+type = "TGTypeI"
+path = "injections/generator-1-1/prime_mover"
+states = ["x_g1", "x_g2", "x_g3"]
+[[components]]
+role = "pss"
+entrypoints = ["mdl_pss_ode!"]
+source = "models/generator_models/pss_models.jl"
+type = "PSSFixed"
+path = "injections/generator-1-1/pss"
+states = []
+[[components]]
+role = "shaft"
+entrypoints = ["mdl_shaft_ode!"]
+source = "models/generator_models/shaft_models.jl"
+type = "SingleMass"
+path = "injections/generator-1-1/shaft"
+states = ["δ", "ω"]
+[[components]]
+role = "dynamic_inverter"
+entrypoints = ["device!"]
+source = "models/device.jl"
+type = "DynamicInverter{AverageConverter, OuterControl{ActivePowerDroop, ReactivePowerDroop}, VoltageModeControl, FixedDCSource, FixedFrequency, LCLFilter, Nothing}"
+path = "injections/generator-2-1"
+states = ["θ_oc", "p_oc", "q_oc", "ξd_ic", "ξq_ic", "γd_ic", "γq_ic", "ϕd_ic", "ϕq_ic", "ir_cnv", "ii_cnv", "vr_filter", "vi_filter", "ir_filter", "ii_filter"]
+[[components]]
+role = "converter"
+entrypoints = ["mdl_converter_ode!"]
+source = "models/inverter_models/converter_models.jl"
+type = "AverageConverter"
+path = "injections/generator-2-1/converter"
+states = []
+[[components]]
+role = "dc_source"
+entrypoints = ["mdl_DCside_ode!"]
+source = "models/inverter_models/DCside_models.jl"
+type = "FixedDCSource"
+path = "injections/generator-2-1/dc_source"
+states = []
+[[components]]
+role = "filter"
+entrypoints = ["mdl_filter_ode!"]
+source = "models/inverter_models/filter_models.jl"
+type = "LCLFilter"
+path = "injections/generator-2-1/filter"
+states = ["ir_cnv", "ii_cnv", "vr_filter", "vi_filter", "ir_filter", "ii_filter"]
+[[components]]
+role = "frequency_estimator"
+entrypoints = ["mdl_freq_estimator_ode!"]
+source = "models/inverter_models/frequency_estimator_models.jl"
+type = "FixedFrequency"
+path = "injections/generator-2-1/freq_estimator"
+states = []
+[[components]]
+role = "inner_control"
+entrypoints = ["mdl_inner_ode!"]
+source = "models/inverter_models/inner_control_models.jl"
+type = "VoltageModeControl"
+path = "injections/generator-2-1/inner_control"
+states = ["ξd_ic", "ξq_ic", "γd_ic", "γq_ic", "ϕd_ic", "ϕq_ic"]
+[[components]]
+role = "outer_control"
+entrypoints = ["mdl_outer_ode!"]
+source = "models/inverter_models/outer_control_models.jl"
+type = "OuterControl{ActivePowerDroop, ReactivePowerDroop}"
+path = "injections/generator-2-1/outer_control"
+states = ["θ_oc", "p_oc", "q_oc"]
+[[components]]
+role = "outer_control"
+entrypoints = ["mdl_outer_ode!"]
+source = "models/inverter_models/outer_control_models.jl"
+type = "ActivePowerDroop"
+path = "injections/generator-2-1/outer_control/active_power_control"
+states = ["θ_oc", "p_oc"]
+[[components]]
+role = "outer_control"
+entrypoints = ["mdl_outer_ode!"]
+source = "models/inverter_models/outer_control_models.jl"
+type = "ReactivePowerDroop"
+path = "injections/generator-2-1/outer_control/reactive_power_control"
+states = ["q_oc"]
+[[components]]
+role = "load"
+entrypoints = ["mdl_zip_load!", "device!"]
+source = "models/load_models.jl"
+type = "StandardLoad"
+path = "injections/load51"
+states = []
+[[components]]
+role = "load"
+entrypoints = ["mdl_zip_load!", "device!"]
+source = "models/load_models.jl"
+type = "StandardLoad"
+path = "injections/load61"
+states = []
+[[components]]
+role = "load"
+entrypoints = ["mdl_zip_load!", "device!"]
+source = "models/load_models.jl"
+type = "StandardLoad"
+path = "injections/load81"
+states = []

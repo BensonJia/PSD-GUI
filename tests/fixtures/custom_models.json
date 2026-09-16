@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "models": [
+    {
+      "id": "julia-smoke",
+      "name": "JuliaSmokeModel",
+      "static_injection": "load51",
+      "description": "backend smoke fixture",
+      "base_power": 100.0,
+      "initialization": "fixed",
+      "states": [
+        {"name": "x", "rhs": "-x", "mass": 1.0, "initial": 0.0}
+      ],
+      "parameters": [],
+      "outputs": {
+        "i_r": "-(P_ref * v_r + Q_ref * v_i) / (v_r^2 + v_i^2)",
+        "i_i": "-(P_ref * v_i - Q_ref * v_r) / (v_r^2 + v_i^2)"
+      }
+    }
+  ]
+}

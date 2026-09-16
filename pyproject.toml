@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "PowerSimulationDynamics-GUI"
+version = "0.1.0"
+description = "NodeGraphQt viewer and visual editor for exported PowerSimulationsDynamics projects"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "NodeGraphQt==0.6.44",
+    "PySide6>=6.6,<7",
+    "Qt.py>=2.0.5,<3",
+]
+
+[project.scripts]
+PowerSimulationDynamics-GUI = "psid_graph_viewer.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["psid_graph_viewer*", "power_system_component_icons*"]
+
+[tool.setuptools.package-data]
+psid_graph_viewer = ["Logo.png", "model_library.json", "julia_backend/*.jl", "julia_backend/*.toml"]
+power_system_component_icons = ["SVG/*.svg"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
